@@ -38,7 +38,8 @@ func main() {
 	router.NewCustomerRouter(api, client)
 
 	app.Listen(os.Getenv("API_PORT"))
-	fmt.Println("Server is running on port:", os.Getenv("API_PORT"))
+	fmt.Println("Server is running on port: ", os.Getenv("API_PORT"))
+	fmt.Println("test update")
 }
 
 func loadENV() {
