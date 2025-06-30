@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navbar from "../../../components/Navbar";
+import EditCustomerModal from "../../../components/EditCustomerModal";
 
 interface Customer {
   id: string;
@@ -21,6 +22,7 @@ export default function CustomerDetailPage() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -31,7 +33,7 @@ export default function CustomerDetailPage() {
   const fetchCustomer = async (customerId: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/api/customer/${customerId}`);
+      const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerId}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -77,6 +79,14 @@ export default function CustomerDetailPage() {
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to delete customer');
       console.error('Error deleting customer:', err);
+    }
+  };
+
+  const handleEditSuccess = () => {
+    setEditModalOpen(false);
+    // Refresh the customer data after successful edit
+    if (params.id) {
+      fetchCustomer(params.id as string);
     }
   };
 
@@ -239,7 +249,7 @@ export default function CustomerDetailPage() {
             <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={() => router.push(`/customer/${customer.id}/edit`)}
+                  onClick={() => setEditModalOpen(true)}
                   className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-md font-medium transition-colors duration-200"
                 >
                   Edit Customer
@@ -255,6 +265,14 @@ export default function CustomerDetailPage() {
           </div>
         </div>
       </div>
+      
+      {/* Edit Customer Modal */}
+      <EditCustomerModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSuccess={handleEditSuccess}
+        customerId={params.id as string}
+      />
     </div>
   );
 }

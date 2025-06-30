@@ -53,10 +53,10 @@ export default function CustomerPage() {
     fetchCustomers();
   }, []);
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = async () => {  
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8080/api/customer');
+      const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/customer`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

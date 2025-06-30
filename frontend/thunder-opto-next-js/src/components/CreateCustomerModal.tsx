@@ -32,7 +32,7 @@ export default function CreateCustomerModal({ open, onClose, onSuccess }: Create
     e.preventDefault();
     try {
       setAddLoading(true);
-      const response = await fetch('http://localhost:8080/api/customer', {
+      const response = await fetch('http://${process.env.NEXT_PUBLIC_API_URL}/api/customer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
