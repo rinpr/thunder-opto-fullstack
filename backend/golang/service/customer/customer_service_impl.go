@@ -35,14 +35,14 @@ func (c *CustomerServiceImpl) FindById(rawId string) (customer models.Customer) 
 	return c.CustomerRepository.FindById(rawId)
 }
 
-// FindByName implements CustomerService.
-func (c *CustomerServiceImpl) FindByName(firstName string) (customer models.Customer) {
-	panic("unimplemented")
+// SearchByName implements CustomerService.
+func (c *CustomerServiceImpl) SearchByName(name string) (customers []models.Customer) {
+	return c.CustomerRepository.SearchByName(name)
 }
 
-// FindByPhone implements CustomerService.
-func (c *CustomerServiceImpl) FindByPhone(phoneNo string) (customer models.Customer) {
-	panic("unimplemented")
+// SearchByPhone implements CustomerService.
+func (c *CustomerServiceImpl) SearchByPhone(phoneNo string) (customers []models.Customer) {
+	return c.CustomerRepository.SearchByPhone(phoneNo)
 }
 
 // Patch implements CustomerService.

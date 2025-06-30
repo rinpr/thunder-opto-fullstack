@@ -37,8 +37,8 @@ func handleReq(r fiber.Router) {
 
 	r.Post("/", customerController.CreateNewCustomer)
 	r.Get("/", customerController.GetAllCustomer)
-	r.Get("/:id", customerController.GetCustomerFromId)
-	r.Get("/:id", customerController.SearchCustomer)
+	// r.Get("/:id", customerController.GetCustomerFromId)
+	r.Get("/search", customerController.SearchCustomer)
 	r.Patch("/:id", customerController.EditCustomer)
 	r.Delete("/:id", customerController.DeleteCustomerById)
 

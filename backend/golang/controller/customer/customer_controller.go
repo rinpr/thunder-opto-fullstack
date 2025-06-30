@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/rinpr/api-optician/models"
 	"github.com/rinpr/api-optician/service/customer"
@@ -57,8 +59,24 @@ func (controller *CustomerController) GetAllCustomer(c *fiber.Ctx) error {
 }
 
 func (controller *CustomerController) SearchCustomer(c *fiber.Ctx) error {
-	search := c.Query("search")
-	customers := controller.customerService.Search(search)
+	search_name := c.Query("name")
+	search_phone := c.Query("phone")
+	var customers []models.Customer
+	// log.Println("original url: ", c.OriginalURL())
+	
+	if search_name != "" {
+		customers = controller.customerService.SearchByName(search_name)
+	} else if search_phone != "" {
+		customers = controller.customerService.SearchByPhone(search_phone)
+	// todo: both name and phone query
+	} else {
+		log.Println("error: both name and phone query are empty")
+		return c.Status(400).JSON(fiber.Map{
+			"CUSTOMERCONTROLLER.SEARCH": "INVALID REQUEST BODY",
+		})
+	}
+	// log.Println("customer: ", customers)
+
 	c.Status(200).JSON(customers)
 	return nil
 }

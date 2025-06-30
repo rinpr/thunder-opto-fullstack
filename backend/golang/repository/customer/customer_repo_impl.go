@@ -102,14 +102,44 @@ func (c *CustomerRepoImpl) FindById(rawId string) (customer models.Customer) {
 	return customer
 }
 
-// FindByName implements CustomerRepository.
-func (c *CustomerRepoImpl) FindByName(firstName string) (customer models.Customer) {
-	panic("unimplemented")
+// todo: sort by letter ascending order
+// SearchByName implements CustomerRepository.
+func (c *CustomerRepoImpl) SearchByName(name string) (customers[] models.Customer) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// 1. $regex: regex is a regular expression that is used to match the name
+	// 2. ^: the name must start with the given name
+	// 3. $options: i is used to make the search case insensitive
+	filter := bson.D{{Key: "first_name", Value: bson.D{{Key: "$regex", Value: "^" + name}, {Key: "$options", Value: "i"}}}}
+
+	cursor, err := c.Collection.Find(ctx, filter)
+	if err != nil {
+		log.Println("Error repo collection find by name: ", err)
+	}
+	if err = cursor.All(ctx, &customers); err != nil {
+		log.Println("Error repo cursor find by name: ", err)
+	}
+
+	return customers
 }
 
-// FindByPhone implements CustomerRepository.
-func (c *CustomerRepoImpl) FindByPhone(phoneNo string) (customer models.Customer) {
-	panic("unimplemented")
+// todo: sort by phone ascending order
+// SearchByPhone implements CustomerRepository.
+func (c *CustomerRepoImpl) SearchByPhone(phoneNo string) (customers []models.Customer) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	filter := bson.D{{Key: "phone", Value: bson.D{{Key: "$regex", Value: "^" + phoneNo}, {Key: "$options", Value: "i"}}}}
+	cursor, err := c.Collection.Find(ctx, filter)
+	if err != nil {
+		log.Println("Error repo collection find by phone: ", err)
+	}
+	if err = cursor.All(ctx, &customers); err != nil {
+		log.Println("Error repo cursor find by phone: ", err)
+	}
+
+	return customers
 }
 
 // Patch implements CustomerRepository.

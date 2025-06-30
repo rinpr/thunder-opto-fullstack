@@ -8,7 +8,7 @@ type CustomerRepository interface {
 	Patch(rawId string, customer models.Customer)
 	DeleteById(rawId string)
 	FindById(rawId string) (customer models.Customer)
-	FindByName(firstName string) (customer models.Customer)
-	FindByPhone(phoneNo string) (customer models.Customer)
+	SearchByName(name string) (customers []models.Customer)
+	SearchByPhone(phoneNo string) (customers []models.Customer)
 	FindAll() []models.Customer
 }
