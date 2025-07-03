@@ -102,6 +102,11 @@ func (c *CustomerRepoImpl) FindById(rawId string) (customer models.Customer) {
 	return customer
 }
 
+// unfinished
+func (c *CustomerRepoImpl) SuperSearch(param string) (customers[] models.Customer) {
+	panic("unimplemented")
+}
+
 // todo: sort by letter ascending order
 // SearchByName implements CustomerRepository.
 func (c *CustomerRepoImpl) SearchByName(name string) (customers[] models.Customer) {
